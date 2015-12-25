@@ -17,17 +17,26 @@ namespace Family.Controllers
         // GET: Users
         public ActionResult Index()
         {
-            return View(db.Users.ToList());
+            
+            if (Session["ID"]!=null)
+            {
+                int ID = (int)Session["ID"];
+                return View(db.Users.Where(U => U.User_Id != ID).ToList());
+            }
+                
+            return Redirect("~/Login");
         }
 
         // GET: Users/Details/5
         public ActionResult Details(int? id)
         {
-            if (id == null)
+            User user;
+            if (id == null && Session["ID"] != null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                user = db.Users.Find((int)Session["ID"]);
+                return View(user);
             }
-            User user = db.Users.Find(id);
+            user = db.Users.Find(id);
             if (user == null)
             {
                 return HttpNotFound();
@@ -38,7 +47,11 @@ namespace Family.Controllers
         // GET: Users/Create
         public ActionResult Create()
         {
-            return View();
+            if(Session["ID"]== null)
+            {
+                return View();
+            }
+            return Redirect("~/Users");
         }
 
         // POST: Users/Create
@@ -52,6 +65,7 @@ namespace Family.Controllers
             {
                 db.Users.Add(user);
                 db.SaveChanges();
+                Session["ID"] = user.User_Id;
                 return RedirectToAction("Index");
             }
 
@@ -59,18 +73,16 @@ namespace Family.Controllers
         }
 
         // GET: Users/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit()
         {
-            if (id == null)
+            
+            if (Session["ID"] != null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                int id = (int) Session["ID"];
+                User user = db.Users.Find(id);
+                return View(user);
             }
-            User user = db.Users.Find(id);
-            if (user == null)
-            {
-                return HttpNotFound();
-            }
-            return View(user);
+            return Redirect("~/Home");
         }
 
         // POST: Users/Edit/5
@@ -90,29 +102,84 @@ namespace Family.Controllers
         }
 
         // GET: Users/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete()
         {
-            if (id == null)
+            
+            if (Session["ID"] != null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                int id = (int)Session["ID"];
+                User user = db.Users.Find(id);
+                return View(user);
             }
-            User user = db.Users.Find(id);
-            if (user == null)
-            {
-                return HttpNotFound();
-            }
-            return View(user);
+            return Redirect("~/Home");
         }
 
         // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed()
         {
+            int id = (int)Session["ID"];
             User user = db.Users.Find(id);
             db.Users.Remove(user);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public ActionResult AddFriend(int? id)
+        {
+            if (Session["ID"] == null)
+                return HttpNotFound("you are not logged in");
+            else
+            {
+                if(id !=null && id != (int)Session["ID"])
+                {
+                    int myID = (int)Session["ID"];
+                    User user = db.Users.Find(id);
+                    User me = db.Users.Find(myID);
+                    me.Friends.Add(user);
+                    db.FriendNotifications.Add(new FriendNotification { User_ID = user.User_Id, Friend_ID = me.User_Id, Time = DateTime.Now, Read =false });
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return HttpNotFound("ID not found");
+                }
+            }
+            
+        }
+
+        public ActionResult FriendRequest()
+        {
+            if(Session["ID"] == null)
+            {
+                return HttpNotFound("Login first");
+            }
+            else
+            {
+                if(Session["ID"] != null)
+                {
+                    int id = (int)Session["ID"];
+                    var Requests = from N in db.FriendNotifications
+                                   join U in db.Users on N.Friend_ID equals U.User_Id
+                                   where N.User_ID == id && N.Read == false
+                                   select U;
+                    var Users = Requests.ToList();
+                    var Notifications = from N in db.FriendNotifications
+                                        join U in db.Users on N.Friend_ID equals U.User_Id
+                                        where N.User_ID == id && N.Read == false
+                                        select N;
+                    foreach (var Noti in Notifications)
+                    {
+                        Noti.Read = true;
+                    }
+                    db.SaveChanges();
+                    
+                    return View(Users.ToList());
+                }
+                return HttpNotFound("Login first");
+            }
         }
 
         protected override void Dispose(bool disposing)

@@ -131,6 +131,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -143,9 +144,35 @@
     <Compile Include="Migrations\201512240249009_Required.Designer.cs">
       <DependentUpon>201512240249009_Required.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201512242139151_RemovedUser1.cs" />
+    <Compile Include="Migrations\201512242139151_RemovedUser1.Designer.cs">
+      <DependentUpon>201512242139151_RemovedUser1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512242317324_AddignPendingRequest.cs" />
+    <Compile Include="Migrations\201512242317324_AddignPendingRequest.Designer.cs">
+      <DependentUpon>201512242317324_AddignPendingRequest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512242331208_DeletePendingRequest.cs" />
+    <Compile Include="Migrations\201512242331208_DeletePendingRequest.Designer.cs">
+      <DependentUpon>201512242331208_DeletePendingRequest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512242340455_AddUser1.cs" />
+    <Compile Include="Migrations\201512242340455_AddUser1.Designer.cs">
+      <DependentUpon>201512242340455_AddUser1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512250028208_removeUser1.cs" />
+    <Compile Include="Migrations\201512250028208_removeUser1.Designer.cs">
+      <DependentUpon>201512250028208_removeUser1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512250101566_AddFriendNotification.cs" />
+    <Compile Include="Migrations\201512250101566_AddFriendNotification.Designer.cs">
+      <DependentUpon>201512250101566_AddFriendNotification.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\FamilyModel.cs" />
     <Compile Include="Models\Like.cs" />
+    <Compile Include="Models\LoginViewModel.cs" />
+    <Compile Include="Models\FriendNotification.cs" />
     <Compile Include="Models\Post.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -190,6 +217,8 @@
     <Content Include="Views\Users\Details.cshtml" />
     <Content Include="Views\Users\Edit.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
+    <Content Include="Views\Login\Index.cshtml" />
+    <Content Include="Views\Users\FriendRequest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -208,6 +237,24 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201512240249009_Required.resx">
       <DependentUpon>201512240249009_Required.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512242139151_RemovedUser1.resx">
+      <DependentUpon>201512242139151_RemovedUser1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512242317324_AddignPendingRequest.resx">
+      <DependentUpon>201512242317324_AddignPendingRequest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512242331208_DeletePendingRequest.resx">
+      <DependentUpon>201512242331208_DeletePendingRequest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512242340455_AddUser1.resx">
+      <DependentUpon>201512242340455_AddUser1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512250028208_removeUser1.resx">
+      <DependentUpon>201512250028208_removeUser1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512250101566_AddFriendNotification.resx">
+      <DependentUpon>201512250101566_AddFriendNotification.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

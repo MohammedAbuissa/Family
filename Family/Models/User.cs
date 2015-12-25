@@ -12,8 +12,8 @@ namespace Family.Models
         public User()
         {
             Posts = new HashSet<Post>();
-            Users1 = new HashSet<User>();
-            Users = new HashSet<User>();
+            //Users1 = new HashSet<User>();
+            Friends = new HashSet<User>();
         }
 
         [Key]
@@ -29,28 +29,34 @@ namespace Family.Models
 
         [Required]
         [StringLength(50)]
+        [DataType(DataType.EmailAddress)]
         public string E_Mail { get; set; }
 
         [Required]
         [StringLength(64)]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
 
         public DateTime? Profile_Picture { get; set; }
 
         [StringLength(20)]
+        [DataType(DataType.PhoneNumber)]
         public string Phone_Number { get; set; }
 
         [Required]
         public bool Gender { get; set; }
-
+        [DataType(DataType.Date)]
         [Column(TypeName = "date")]
+        [DisplayFormat(ApplyFormatInEditMode = true)]
         public DateTime Birthday { get; set; }
 
         public byte Marital_Status { get; set; }
 
+        [DataType(DataType.Text)]
         [Column(TypeName = "text")]
         public string About_me { get; set; }
 
+        
         [StringLength(50)]
         public string HomeTown { get; set; }
 
@@ -58,9 +64,7 @@ namespace Family.Models
         public virtual ICollection<Post> Posts { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<User> Users1 { get; set; }
+        public virtual ICollection<User> Friends { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<User> Users { get; set; }
     }
 }

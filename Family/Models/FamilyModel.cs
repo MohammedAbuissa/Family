@@ -15,7 +15,7 @@ namespace Family.Models
         public virtual DbSet<Like> Likes { get; set; }
         public virtual DbSet<Post> Posts { get; set; }
         public virtual DbSet<User> Users { get; set; }
-
+        public virtual DbSet<FriendNotification> FriendNotifications { get; set; } 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Post>()
@@ -64,8 +64,8 @@ namespace Family.Models
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<User>()
-                .HasMany(e => e.Users1)
-                .WithMany(e => e.Users)
+                .HasMany(e => e.Friends)
+                .WithMany()
                 .Map(m => m.ToTable("Friends").MapLeftKey("Friend_Id").MapRightKey("User_Id"));
         }
     }
