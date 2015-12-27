@@ -21,7 +21,11 @@ namespace Family.Controllers
             if (Session["ID"]!=null)
             {
                 int ID = (int)Session["ID"];
-                return View(db.Users.Where(U => U.User_Id != ID).ToList());
+                var Me = db.Users.Find(ID);
+                var Friends = Me.Friends.ToList();
+                var People = db.Users.ToList();
+                var Find = People.Except(Friends);
+                return View(Find);
             }
                 
             return Redirect("~/Login");
@@ -63,6 +67,7 @@ namespace Family.Controllers
         {
             if (ModelState.IsValid)
             {
+                user.Friends.Add(user);
                 db.Users.Add(user);
                 db.SaveChanges();
                 Session["ID"] = user.User_Id;
