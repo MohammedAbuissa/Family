@@ -7,7 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Family.Models;
-
+using System.Web.Helpers;
 namespace Family.Controllers
 {
     public class UsersController : Controller
@@ -67,6 +67,7 @@ namespace Family.Controllers
         {
             if (ModelState.IsValid)
             {
+                user.Password = Crypto.HashPassword(user.Password);
                 user.Friends.Add(user);
                 db.Users.Add(user);
                 db.SaveChanges();
@@ -185,6 +186,17 @@ namespace Family.Controllers
                 }
                 return HttpNotFound("Login first");
             }
+        }
+
+        public ActionResult Friend()
+        {
+            if(Session["ID"] != null)
+            {
+                int id = (int) Session["ID"];
+                return View(db.Users.Find(id).Friends.Where(x => x.User_Id != id).ToList());
+            }
+            else
+            return Redirect("~/Home");
         }
 
         protected override void Dispose(bool disposing)

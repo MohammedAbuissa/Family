@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Family.Models;
+using System.Web.Helpers;
 namespace Family.Controllers
 {
     public class LoginController : Controller
@@ -20,11 +21,9 @@ namespace Family.Controllers
         public ActionResult Index([Bind(Include ="E_Mail,Password")] LoginViewModel Login)
         {
             var User = (from U in fm.Users
-                       where U.E_Mail == Login.E_Mail && U.Password == Login.Password
+                       where U.E_Mail == Login.E_Mail
                        select U).ToList();
-            
-
-            if (User.Count > 0)
+            if (User.Count > 0 && Crypto.VerifyHashedPassword(User[0].Password, Login.Password))
             {
                 Session["ID"] = User[0].User_Id;
                 return Redirect("~/Users");

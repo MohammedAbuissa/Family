@@ -33,7 +33,7 @@ namespace Family.Models
         public string E_Mail { get; set; }
 
         [Required]
-        [StringLength(64)]
+        [StringLength(68)]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
