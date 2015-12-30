@@ -1,10 +1,8 @@
 namespace Family.Models
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     public partial class Like
     {
@@ -17,8 +15,11 @@ namespace Family.Models
         [Column(Order = 1)]
         public DateTime Post_Id { get; set; }
 
+        [ForeignKey("LikeOwner")]
         public int Like_Owner_Id { get; set; }
 
         public virtual Post Post { get; set; }
+
+        public virtual User LikeOwner { get; set; }
     }
 }

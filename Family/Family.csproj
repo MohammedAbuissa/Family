@@ -132,7 +132,6 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
-    <Compile Include="Controllers\PostsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -172,6 +171,26 @@
     <Compile Include="Migrations\201512272234392_IncreasePasswordField.cs" />
     <Compile Include="Migrations\201512272234392_IncreasePasswordField.Designer.cs">
       <DependentUpon>201512272234392_IncreasePasswordField.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512290354262_AddHasPicture.cs" />
+    <Compile Include="Migrations\201512290354262_AddHasPicture.Designer.cs">
+      <DependentUpon>201512290354262_AddHasPicture.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512290457505_EditUserForeignKey.cs" />
+    <Compile Include="Migrations\201512290457505_EditUserForeignKey.Designer.cs">
+      <DependentUpon>201512290457505_EditUserForeignKey.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512290507443_RemovedCommentAndLikeConnection.cs" />
+    <Compile Include="Migrations\201512290507443_RemovedCommentAndLikeConnection.Designer.cs">
+      <DependentUpon>201512290507443_RemovedCommentAndLikeConnection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512290535366_RemoveComments.cs" />
+    <Compile Include="Migrations\201512290535366_RemoveComments.Designer.cs">
+      <DependentUpon>201512290535366_RemoveComments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512300230212_FixedCommentsCodeFirst.cs" />
+    <Compile Include="Migrations\201512300230212_FixedCommentsCodeFirst.Designer.cs">
+      <DependentUpon>201512300230212_FixedCommentsCodeFirst.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\FamilyModel.cs" />
@@ -230,6 +249,7 @@
     <Content Include="Views\Posts\Edit.cshtml" />
     <Content Include="Views\Posts\Index.cshtml" />
     <Content Include="Views\Users\Friend.cshtml" />
+    <Content Include="Views\Users\NewPost.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -269,6 +289,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201512272234392_IncreasePasswordField.resx">
       <DependentUpon>201512272234392_IncreasePasswordField.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512290354262_AddHasPicture.resx">
+      <DependentUpon>201512290354262_AddHasPicture.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512290457505_EditUserForeignKey.resx">
+      <DependentUpon>201512290457505_EditUserForeignKey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512290507443_RemovedCommentAndLikeConnection.resx">
+      <DependentUpon>201512290507443_RemovedCommentAndLikeConnection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512290535366_RemoveComments.resx">
+      <DependentUpon>201512290535366_RemoveComments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512300230212_FixedCommentsCodeFirst.resx">
+      <DependentUpon>201512300230212_FixedCommentsCodeFirst.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -11,6 +11,13 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
+            @Html.DisplayNameFor(model => model.Profile_Picture)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Profile_Picture)
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.First_Name)
         </dt>
 
@@ -34,21 +41,8 @@
             @Html.DisplayFor(model => model.E_Mail)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Password)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Password)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Profile_Picture)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Profile_Picture)
-        </dd>
+        
 
         <dt>
             @Html.DisplayNameFor(model => model.Phone_Number)
@@ -63,7 +57,14 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Gender)
+            @if(Model.Gender)
+            {
+                <p>M</p>
+            }
+            else
+            {
+                <p>F</p>
+            }
         </dd>
 
         <dt>
@@ -79,7 +80,10 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Marital_Status)
+            @{ 
+                string[] x = new string[] { "Single", "Engaged","Married"};
+                <p>@x[Model.Marital_Status]</p>
+            }
         </dd>
 
         <dt>

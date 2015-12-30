@@ -27,8 +27,9 @@ namespace Family.Models
                 .WithRequired(e => e.Post);
 
             modelBuilder.Entity<Post>()
-                .HasMany(e => e.Posts1)
-                .WithOptional(e => e.Post1);
+                .HasMany(e => e.Comments)
+                .WithMany()
+                .Map(m => m.ToTable("Comments").MapLeftKey("User_ID","Post_Id").MapRightKey("Comment_User_Id","Comment_Id"));
 
             modelBuilder.Entity<User>()
                 .Property(e => e.First_Name)
