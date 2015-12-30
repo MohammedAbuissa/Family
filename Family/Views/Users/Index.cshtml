@@ -6,9 +6,6 @@
 
 <h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table class="table">
     <tr>
         <th>
@@ -42,7 +39,8 @@
         </td>
         <td>
             @Html.ActionLink("Add Friend", "AddFriend", new { id=item.User_Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.User_Id })
+            @Html.ActionLink("Details", "Details", new { id=item.User_Id })|
+            @Html.ActionLink("Profile", "UserProfile", new { id = item.User_Id })
         </td>
     </tr>
 }

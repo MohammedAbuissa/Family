@@ -41,9 +41,6 @@
             @Html.DisplayFor(model => model.E_Mail)
         </dd>
 
-
-        
-
         <dt>
             @Html.DisplayNameFor(model => model.Phone_Number)
         </dt>
@@ -104,6 +101,35 @@
 
     </dl>
 </div>
+@*<table class="table">
+    <tr>
+        <th>
+            <p>Caption</p>
+        </th>
+        <th>
+            <p>Time</p>
+        </th>
+        <th>
+
+        </th>
+    </tr>
+    @foreach (var item in ViewBag.Posts)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => (item as Family.Models.Post).Caption)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => (item as Family.Models.Post).Time)
+            </td>
+            <td>
+                @Html.ActionLink("Add Friend", "AddFriend", new { id = item.User_Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.User_Id })
+            </td>
+        </tr>
+    }
+</table>*@
+
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.User_Id }) |
     @Html.ActionLink("Back to List", "Index")

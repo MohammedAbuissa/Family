@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using Family.Models;
 using System.Web.Helpers;
+using System.IO;
 namespace Family.Controllers
 {
     public class UsersController : Controller
@@ -40,6 +41,7 @@ namespace Family.Controllers
                 return View(user);
             }
             user = db.Users.Find(id);
+
             if (user == null)
             {
                 return Redirect("~/login");
@@ -71,6 +73,25 @@ namespace Family.Controllers
                 db.Users.Add(user);
                 db.SaveChanges();
                 Session["ID"] = user.User_Id;
+                user.Posts.Add(new Post() { User_Id = user.User_Id, Caption = user.First_Name + " has created a profile", Private_Public = true, Time = DateTime.Now });
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
+                {
+                    Exception raise = dbEx;
+                    foreach (var validationErrors in dbEx.EntityValidationErrors)
+                    {
+                        foreach (var validationError in validationErrors.ValidationErrors)
+                        {
+                            string message = string.Format("{0}:{1}", validationErrors.Entry.Entity.ToString(), validationError.ErrorMessage);
+                            //raise a new exception inserting the current one as the InnerException
+                            raise = new InvalidOperationException(message, raise);
+                        }
+                    }
+                    throw raise;
+                }
                 return RedirectToAction("Index");
             }
 
@@ -228,6 +249,91 @@ namespace Family.Controllers
                 return Redirect("~/home");
             }
             return Redirect("~/login");
+        }
+
+        public ActionResult UserProfile(int? id)
+        {
+            if (Session["ID"] == null)
+            {
+                return Redirect("~/login");
+            }
+            int MyID = (int)Session["ID"];
+            User me = db.Users.Find(MyID);
+            if (Session["ID"] != null && id == null)//me
+            {
+                return View(me.Posts.ToList());
+            }
+            //I'm accessing someone else profile
+            MyID = (int)Session["ID"];
+            var user = db.Users.Find(id);
+            bool IsFollow = me.Friends.Contains(user);
+            bool IsFollowing = user.Friends.Contains(me);
+            if(IsFollow && IsFollowing)
+            {
+                return View(user.Posts.OrderByDescending(x => x.Time).ToList());
+            }
+            else
+            {
+                return View(user.Posts.Where(p => p.Private_Public == true).OrderByDescending(x => x.Time).ToList());
+            }
+        }
+
+        public ActionResult NewsFeed()
+        {
+            if (Session["ID"] != null)
+            {
+                var id = (int)Session["ID"];
+                var Me = db.Users.Find(id);
+                var posts = new List<Post>();
+                var Followers = Me.Friends;
+                foreach (var Friend in Followers)
+                {
+                    if (Friend.Friends.Contains(Me))
+                        posts.AddRange(Friend.Posts);
+                    else
+                        posts.AddRange(Friend.Posts.Where(x => x.Private_Public == true));
+                }
+                return View(posts.OrderByDescending(x=> x.Time));
+            }
+            else
+            {
+                return Redirect("~/login");
+            }
+        }
+
+        public ActionResult Discover()
+        {
+            List<User> users = db.Users.ToList();
+            if (Session["ID"] != null)
+            {
+                int id = (int)Session["ID"];
+                users = users.Except(db.Users.Find(id).Friends.ToList()).ToList();
+            }
+            var Posts = (from U in users
+                         join P in db.Posts on U.User_Id equals P.User_Id
+                         where P.Private_Public == true
+                         select P);
+            return View(Posts.ToList());
+        }
+        public ActionResult submitPhoto()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult AddPhoto(HttpPostedFileBase file)
+        {
+            if(file != null)
+            {
+                int id = (int)Session["ID"];
+                string name = DateTime.Now.ToString();
+                name = name.Replace(':', '_');
+                string path = Path.Combine(Server.MapPath("~/images"), id.ToString());
+                //Directory.CreateDirectory(path);
+                path = Path.Combine(path, name);
+                file.SaveAs(path);
+            }
+            return Redirect("~/home");
         }
 
         protected override void Dispose(bool disposing)

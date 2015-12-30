@@ -192,6 +192,10 @@
     <Compile Include="Migrations\201512300230212_FixedCommentsCodeFirst.Designer.cs">
       <DependentUpon>201512300230212_FixedCommentsCodeFirst.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201512300617409_hello.cs" />
+    <Compile Include="Migrations\201512300617409_hello.Designer.cs">
+      <DependentUpon>201512300617409_hello.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\FamilyModel.cs" />
     <Compile Include="Models\Like.cs" />
@@ -243,13 +247,12 @@
     <Content Include="Views\Users\Index.cshtml" />
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\Users\FriendRequest.cshtml" />
-    <Content Include="Views\Posts\Create.cshtml" />
-    <Content Include="Views\Posts\Delete.cshtml" />
-    <Content Include="Views\Posts\Details.cshtml" />
-    <Content Include="Views\Posts\Edit.cshtml" />
-    <Content Include="Views\Posts\Index.cshtml" />
     <Content Include="Views\Users\Friend.cshtml" />
     <Content Include="Views\Users\NewPost.cshtml" />
+    <Content Include="Views\Users\UserProfile.cshtml" />
+    <Content Include="Views\Users\NewsFeed.cshtml" />
+    <Content Include="Views\Users\Discover.cshtml" />
+    <Content Include="Views\Users\submitPhoto.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -304,6 +307,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201512300230212_FixedCommentsCodeFirst.resx">
       <DependentUpon>201512300230212_FixedCommentsCodeFirst.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512300617409_hello.resx">
+      <DependentUpon>201512300617409_hello.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
