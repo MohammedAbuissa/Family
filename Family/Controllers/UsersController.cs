@@ -18,7 +18,7 @@ namespace Family.Controllers
         // GET: Users
         public ActionResult Index()
         {
-            if (Session["ID"]!=null)
+            if (Session["ID"] != null)
             {
                 int ID = (int)Session["ID"];
                 var Me = db.Users.Find(ID);
@@ -27,7 +27,7 @@ namespace Family.Controllers
                 var Find = People.Except(Friends);
                 return View(Find);
             }
-                
+
             return Redirect("~/Login");
         }
 
@@ -49,15 +49,6 @@ namespace Family.Controllers
             return View(user);
         }
 
-        // GET: Users/Create
-        public ActionResult Create()
-        {
-            if(Session["ID"]== null)
-            {
-                return View();
-            }
-            return Redirect("~/Users");
-        }
 
         // POST: Users/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -79,8 +70,8 @@ namespace Family.Controllers
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
-                
-                
+
+
             }
 
             return View(user);
@@ -89,10 +80,10 @@ namespace Family.Controllers
         // GET: Users/Edit/5
         public ActionResult Edit()
         {
-            
+
             if (Session["ID"] != null)
             {
-                int id = (int) Session["ID"];
+                int id = (int)Session["ID"];
                 User user = db.Users.Find(id);
                 return View(user);
             }
@@ -118,7 +109,7 @@ namespace Family.Controllers
         // GET: Users/Delete/5
         public ActionResult Delete()
         {
-            
+
             if (Session["ID"] != null)
             {
                 int id = (int)Session["ID"];
@@ -147,17 +138,17 @@ namespace Family.Controllers
                 return Redirect("~/login");
             else
             {
-                if(id !=null && id != (int)Session["ID"])
+                if (id != null && id != (int)Session["ID"])
                 {
                     int myID = (int)Session["ID"];
                     User user = db.Users.Find(id);
                     User me = db.Users.Find(myID);
                     me.Friends.Add(user);
                     var Notificaiton = (from U in db.FriendNotifications
-                                       where U.User_ID == me.User_Id && U.Friend_ID == user.User_Id
-                                       select U).ToList();
-                    if(Notificaiton.Count == 0)
-                        db.FriendNotifications.Add(new FriendNotification { User_ID = user.User_Id, Friend_ID = me.User_Id, Time = DateTime.Now, Read =false });
+                                        where U.User_ID == me.User_Id && U.Friend_ID == user.User_Id
+                                        select U).ToList();
+                    if (Notificaiton.Count == 0)
+                        db.FriendNotifications.Add(new FriendNotification { User_ID = user.User_Id, Friend_ID = me.User_Id, Time = DateTime.Now, Read = false });
                     else
                     {
                         Notificaiton[0].Read = true;
@@ -170,20 +161,20 @@ namespace Family.Controllers
                     return HttpNotFound("ID not found");
                 }
             }
-            
+
         }
-        
+
 
 
         public ActionResult FriendRequest()
         {
-            if(Session["ID"] == null)
+            if (Session["ID"] == null)
             {
                 return Redirect("~/login");
             }
             else
             {
-                if(Session["ID"] != null)
+                if (Session["ID"] != null)
                 {
                     int id = (int)Session["ID"];
                     var Requests = from N in db.FriendNotifications
@@ -205,20 +196,20 @@ namespace Family.Controllers
 
         public ActionResult Friend()
         {
-            if(Session["ID"] != null)
+            if (Session["ID"] != null)
             {
-                int id = (int) Session["ID"];
+                int id = (int)Session["ID"];
                 return View(db.Users.Find(id).Friends.Where(x => x.User_Id != id).ToList());
             }
             else
-            return Redirect("~/Home");
+                return Redirect("~/Home");
         }
 
         public ActionResult NewPost()
         {
             if (Session["ID"] != null)
             {
-                return View();   
+                return View();
             }
             return Redirect("~/login");
         }
@@ -227,7 +218,7 @@ namespace Family.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult NewPost([Bind(Include = "Caption,Private_Public")]Post p)
         {
-            if(Session["ID"] != null)
+            if (Session["ID"] != null)
             {
                 if (ModelState.IsValid)
                 {
@@ -262,7 +253,7 @@ namespace Family.Controllers
             var user = db.Users.Find(id);
             bool IsFollow = me.Friends.Contains(user);
             bool IsFollowing = user.Friends.Contains(me);
-            if(IsFollow && IsFollowing)
+            if (IsFollow && IsFollowing)
             {
                 return View(user.Posts.OrderByDescending(x => x.Time).ToList());
             }
@@ -287,9 +278,9 @@ namespace Family.Controllers
                     else
                         posts.AddRange(Friend.Posts.Where(x => x.Private_Public == true));
                 }
-                return View(posts.OrderByDescending(x=> x.Time));
+                return View(posts.OrderByDescending(x => x.Time));
             }
-            
+
             else
             {
                 return Redirect("~/login");
@@ -319,7 +310,7 @@ namespace Family.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult AddPhoto(HttpPostedFileBase file)
         {
-            if(file != null)
+            if (file != null)
             {
                 int id = (int)Session["ID"];
                 string name = DateTime.Now.ToString();
@@ -363,11 +354,11 @@ namespace Family.Controllers
                 string name = User.Profile_Picture.ToString();
                 name = name.Replace(':', '_');
                 string path = Path.Combine(Server.MapPath("~/images"), User.User_Id.ToString());
-                if(!Directory.Exists(path))
+                if (!Directory.Exists(path))
                 {
                     Directory.CreateDirectory(path);
                 }
-                path = Path.Combine(path, name+ ".png");
+                path = Path.Combine(path, name + ".jpg");
                 File.SaveAs(path);
             }
             else
@@ -377,10 +368,33 @@ namespace Family.Controllers
             }
 
             return Return;
-            
+
         }
 
 
+        public ActionResult SearchEmail(string SearchString)
+        {
+
+            if (!string.IsNullOrEmpty(SearchString))
+            {
+                var Result = from u in db.Users
+                             where u.E_Mail == SearchString
+                             select u;
+                return View(Result);
+            }
+            return View(new List<User>());
+        }
+        public ActionResult SearchPhone(string SearchString)
+        {
+            if (!string.IsNullOrEmpty(SearchString))
+            {
+                var Result = from u in db.Users
+                             where u.Phone_Number == SearchString
+                             select u;
+                return View(Result);
+            }
+            return View(new List<User>());
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)
