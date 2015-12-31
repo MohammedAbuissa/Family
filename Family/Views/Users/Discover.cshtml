@@ -23,14 +23,17 @@
         <th>
             @Html.DisplayNameFor(model => model.Caption)
         </th>
+        <th>
+            <p>Picture</p>
+        </th>
         <th></th>
     </tr>
 
 @foreach (var item in Model) {
     <tr>
         <td>
-            @{ViewBag.PhotoPath = item.User.Profile_Picture == null ? Url.Content(Path.Combine(Server.MapPath("~/images/Defaults/"), item.User.Gender ? "F.jpg" : "M.jpg")) : Url.Content(Path.Combine(Server.MapPath("~/images"), item.User_Id.ToString(), item.User.Profile_Picture.ToString().Replace(':', '_') + ".jpg"));}
-            <img src="@ViewBag.PhotoPath" alt="Image" height="200" width="200" />
+            @{ViewBag.PhotoPath = item.User.Profile_Picture == null ? Url.Content(Path.Combine(Server.MapPath("~/images/Defaults/"), item.User.Gender ? "F.jpg" : "M.jpg")) : Url.Content(Path.Combine(Server.MapPath("~/images"), item.User_Id.ToString(), item.User.Profile_Picture.ToString().Replace(':', '_').Replace('/','_') + ".jpg"));}
+            <img src="@ViewBag.PhotoPath" alt="@ViewBag.PhotoPath" height="200" width="200" />
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.User.First_Name)
@@ -40,6 +43,10 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Caption)
+        </td>
+        <td>
+            @{ViewBag.PhotoPath = item.Has_Picture ? Url.Content(Path.Combine(Server.MapPath("~/images"), item.User_Id.ToString(), item.Time.ToString().Replace(':', '_').Replace('/', '_') + ".jpg")) : "";}
+            <img src="@ViewBag.PhotoPath" alt="@ViewBag.PhotoPath" height="200" width="200" />
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |

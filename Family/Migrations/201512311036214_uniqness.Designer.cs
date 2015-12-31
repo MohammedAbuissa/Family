@@ -7,13 +7,13 @@ namespace Family.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class Required : IMigrationMetadata
+    public sealed partial class uniqness : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Required));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(uniqness));
         
         string IMigrationMetadata.Id
         {
-            get { return "201512240249009_Required"; }
+            get { return "201512311036214_uniqness"; }
         }
         
         string IMigrationMetadata.Source

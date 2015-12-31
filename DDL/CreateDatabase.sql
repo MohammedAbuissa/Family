@@ -5,9 +5,9 @@ GO
 CREATE DATABASE [Family_Database]
  CONTAINMENT = NONE
  ON  PRIMARY 
-( NAME = N'Family_Database', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL12.MSSQLSERVER\MSSQL\DATA\Family_Database.mdf' , SIZE = 4096KB , MAXSIZE = UNLIMITED, FILEGROWTH = 1024KB )
+( NAME = N'Family_Database', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL12.MSSQLSERVER\MSSQL\DATA\Family_Database.mdf' , SIZE = 5MB , MAXSIZE = UNLIMITED, FILEGROWTH = 1024KB )
  LOG ON 
-( NAME = N'Family_Database_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL12.MSSQLSERVER\MSSQL\DATA\Family_Database_log.ldf' , SIZE = 1024KB , MAXSIZE = 2048GB , FILEGROWTH = 10%)
+( NAME = N'Family_Database_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL12.MSSQLSERVER\MSSQL\DATA\Family_Database_log.ldf' , SIZE = 5MB , MAXSIZE = 2048GB , FILEGROWTH = 10%)
 GO
 
 ALTER DATABASE [Family_Database] SET COMPATIBILITY_LEVEL = 120

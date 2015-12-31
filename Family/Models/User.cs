@@ -12,7 +12,6 @@ namespace Family.Models
         public User()
         {
             Posts = new HashSet<Post>();
-            //Users1 = new HashSet<User>();
             Friends = new HashSet<User>();
         }
 
@@ -29,6 +28,7 @@ namespace Family.Models
 
         [Required]
         [StringLength(50)]
+        [Index("EmailIndex", IsUnique = true)]
         [DataType(DataType.EmailAddress)]
         public string E_Mail { get; set; }
 
@@ -52,6 +52,7 @@ namespace Family.Models
         [DisplayFormat(ApplyFormatInEditMode = true)]
         public DateTime Birthday { get; set; }
 
+        [Required]
         public byte Marital_Status { get; set; }
 
         [DataType(DataType.Text)]

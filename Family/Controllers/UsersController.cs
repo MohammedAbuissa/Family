@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using Family.Models;
 using System.Web.Helpers;
 using System.IO;
+using System.Diagnostics;
 namespace Family.Controllers
 {
     public class UsersController : Controller
@@ -216,7 +217,7 @@ namespace Family.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult NewPost([Bind(Include = "Caption,Private_Public")]Post p)
+        public ActionResult RegisterPost([Bind(Include = "Caption,Private_Public")]Post p)
         {
             if (Session["ID"] != null)
             {
@@ -349,15 +350,16 @@ namespace Family.Controllers
             };
             ActionResult Return = Create(User);
             HttpPostedFileBase File = cavm.Profile_Picture;
-            if (File != null)
-            {
+            
                 string name = User.Profile_Picture.ToString();
-                name = name.Replace(':', '_');
+                name = name.Replace(':', '_').Replace('/','_').Replace('-','_');
                 string path = Path.Combine(Server.MapPath("~/images"), User.User_Id.ToString());
                 if (!Directory.Exists(path))
                 {
                     Directory.CreateDirectory(path);
                 }
+            if (File != null)
+            {
                 path = Path.Combine(path, name + ".jpg");
                 File.SaveAs(path);
             }
@@ -370,8 +372,39 @@ namespace Family.Controllers
             return Return;
 
         }
-
-
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult NewPost(NewPostViewModel npvm)
+        {
+            if(Session["ID"]!=null)
+            {
+                var post = new Post()
+                {
+                    Caption = npvm.Caption,
+                    Time = DateTime.Now,
+                    Private_Public = npvm.Private_Public,
+                    User_Id = (int)Session["ID"]
+                };
+                if (npvm.Picture != null)
+                {
+                    post.Has_Picture = true;
+                }
+                else
+                {
+                    post.Has_Picture = false;
+                }
+                ActionResult Return = RegisterPost(post);
+                if(npvm.Picture != null)
+                {
+                    string name = post.Time.ToString().Replace(':', '_').Replace('/','_').Replace('-','_');
+                    string path = Path.Combine(Server.MapPath("~/images"), post.User_Id.ToString(), name+".jpg");
+                    npvm.Picture.SaveAs(path);   
+                }
+                return Return;
+            }
+            
+            return null;
+        }
         public ActionResult SearchEmail(string SearchString)
         {
 
@@ -384,17 +417,7 @@ namespace Family.Controllers
             }
             return View(new List<User>());
         }
-        public ActionResult SearchPhone(string SearchString)
-        {
-            if (!string.IsNullOrEmpty(SearchString))
-            {
-                var Result = from u in db.Users
-                             where u.Phone_Number == SearchString
-                             select u;
-                return View(Result);
-            }
-            return View(new List<User>());
-        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

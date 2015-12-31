@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Web;
 namespace Family.Models
 {
-    class NewPostViewModel
+    public class NewPostViewModel
     {
         [Column(TypeName = "text")]
         [StringLength(144)]
