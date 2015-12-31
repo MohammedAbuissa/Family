@@ -1,0 +1,52 @@
+﻿@model IEnumerable<Family.Models.Post>
+
+@{
+    ViewBag.Title = "NewsFeed";
+}
+
+<h2>NewsFeed</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.User.Profile_Picture)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.User.First_Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.User.Last_Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Caption)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @{ViewBag.PhotoPath = item.User.Profile_Picture == null ? Url.Content(Path.Combine(Server.MapPath("~/images/Defaults/"), item.User.Gender ? "F.jpg" : "M.jpg")) : Url.Content(Path.Combine(Server.MapPath("~/images"), item.User_Id.ToString(), item.User.Profile_Picture.ToString().Replace(':', '_') + ".jpg"));}
+            <img src="@ViewBag.PhotoPath" alt="Image" height="200" width="200" />
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.User.First_Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.User.Last_Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Caption)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>
+    </tr>
+}
+
+</table>

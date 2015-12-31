@@ -1,0 +1,84 @@
+﻿@model IEnumerable<Family.Models.Post>
+
+@{
+    ViewBag.Title = "Profile";
+}
+
+<h2>UserProfile</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.User.First_Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.User.Last_Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.User.Phone_Number)
+        </th>
+        @*<th>
+                @Html.DisplayNameFor(model => model.User.HomeTown)
+            </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.User.HomeTown)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.User.Profile_Picture)
+        </th>
+    </tr>
+    <tr>
+        <td>
+            @Html.DisplayFor(model => model.First().User.First_Name)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.First().User.Last_Name)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.First().User.Phone_Number)
+        </td>
+        @*<td>
+                @Html.DisplayFor(model => model.First().User.HomeTown)
+            </td>*@
+        <td>
+            @Html.DisplayFor(model => model.First().User.HomeTown)
+        </td>
+        <td>
+            @{ViewBag.PhotoPath= Model.First().User.Profile_Picture == null ? Url.Content(Path.Combine(Server.MapPath("~/images/Defaults/"), Model.First().User.Gender? "F.jpg":"M.jpg")) : Url.Content(Path.Combine(Server.MapPath("~/images"), Model.First().User_Id.ToString(), Model.First().User.Profile_Picture.ToString().Replace(':', '_') + ".jpg"));}
+            <img src="@ViewBag.PhotoPath" alt="Image" height="200" width="200"/>
+        </td>
+   </tr> 
+    
+    
+</table>
+    
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Caption)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Time)
+        </th>
+        <th>           
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Caption)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Time)
+        </td>
+        <td>
+            @Html.ActionLink("Like", "Like", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Comment", "Comment", new { /* id=item.PrimaryKey */ })
+        </td>
+    </tr>
+}
+
+</table>
