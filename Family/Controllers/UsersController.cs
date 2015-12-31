@@ -68,31 +68,19 @@ namespace Family.Controllers
         {
             if (ModelState.IsValid)
             {
-                user.Password = Crypto.HashPassword(user.Password);
-                user.Friends.Add(user);
-                db.Users.Add(user);
-                db.SaveChanges();
-                Session["ID"] = user.User_Id;
-                user.Posts.Add(new Post() { User_Id = user.User_Id, Caption = user.First_Name + " has created a profile", Private_Public = true, Time = DateTime.Now });
-                try
+                if (ModelState.IsValid)
                 {
+                    user.Password = Crypto.HashPassword(user.Password);
+                    user.Friends.Add(user);
+                    db.Users.Add(user);
                     db.SaveChanges();
+                    Session["ID"] = user.User_Id;
+                    user.Posts.Add(new Post() { User_Id = user.User_Id, Caption = user.First_Name + " has created a profile", Private_Public = true, Time = DateTime.Now });
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
                 }
-                catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
-                {
-                    Exception raise = dbEx;
-                    foreach (var validationErrors in dbEx.EntityValidationErrors)
-                    {
-                        foreach (var validationError in validationErrors.ValidationErrors)
-                        {
-                            string message = string.Format("{0}:{1}", validationErrors.Entry.Entity.ToString(), validationError.ErrorMessage);
-                            //raise a new exception inserting the current one as the InnerException
-                            raise = new InvalidOperationException(message, raise);
-                        }
-                    }
-                    throw raise;
-                }
-                return RedirectToAction("Index");
+                
+                
             }
 
             return View(user);
@@ -241,12 +229,17 @@ namespace Family.Controllers
         {
             if(Session["ID"] != null)
             {
-                int id= (int)Session["ID"];
-                p.User_Id = id;
-                p.Time = DateTime.Now;
-                db.Posts.Add(p);
-                db.SaveChanges();
-                return Redirect("~/home");
+                if (ModelState.IsValid)
+                {
+                    int id = (int)Session["ID"];
+                    p.User_Id = id;
+                    p.Time = DateTime.Now;
+                    db.Posts.Add(p);
+                    db.SaveChanges();
+                    return Redirect("~/home");
+                }
+                else
+                    return View();
             }
             return Redirect("~/login");
         }
@@ -261,6 +254,7 @@ namespace Family.Controllers
             User me = db.Users.Find(MyID);
             if (Session["ID"] != null && id == null)//me
             {
+                ViewBag.PhotoPath = Path.Combine(Server.MapPath("~/images"), me.User_Id.ToString(), me.Profile_Picture.ToString().Replace(':', '_'));
                 return View(me.Posts.ToList());
             }
             //I'm accessing someone else profile
@@ -295,6 +289,7 @@ namespace Family.Controllers
                 }
                 return View(posts.OrderByDescending(x=> x.Time));
             }
+            
             else
             {
                 return Redirect("~/login");
@@ -321,6 +316,7 @@ namespace Family.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult AddPhoto(HttpPostedFileBase file)
         {
             if(file != null)
@@ -335,6 +331,55 @@ namespace Family.Controllers
             }
             return Redirect("~/home");
         }
+
+
+        public ActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Register(CreateAccountViewModel cavm)
+        {
+            var User = new User()
+            {
+                First_Name = cavm.First_Name,
+                Last_Name = cavm.Last_Name,
+                Birthday = cavm.Birthday,
+                Phone_Number = cavm.Phone_Number,
+                HomeTown = cavm.HomeTown,
+                E_Mail = cavm.E_Mail,
+                Gender = cavm.Gender,
+                Marital_Status = cavm.Marital_Status,
+                Profile_Picture = DateTime.Now,
+                Password = cavm.Password,
+                About_me = cavm.About_Me
+            };
+            ActionResult Return = Create(User);
+            HttpPostedFileBase File = cavm.Profile_Picture;
+            if (File != null)
+            {
+                string name = User.Profile_Picture.ToString();
+                name = name.Replace(':', '_');
+                string path = Path.Combine(Server.MapPath("~/images"), User.User_Id.ToString());
+                if(!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                path = Path.Combine(path, name+ ".png");
+                File.SaveAs(path);
+            }
+            else
+            {
+                User.Profile_Picture = null;
+                db.SaveChanges();
+            }
+
+            return Return;
+            
+        }
+
 
         protected override void Dispose(bool disposing)
         {

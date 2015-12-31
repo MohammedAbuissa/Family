@@ -45,6 +45,8 @@ namespace Family.Models
 
         [Required]
         public bool Gender { get; set; }
+
+
         [DataType(DataType.Date)]
         [Column(TypeName = "date")]
         [DisplayFormat(ApplyFormatInEditMode = true)]
